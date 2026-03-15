@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIBBA TENNIS CLINIC - Iscrizioni</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #c25e44; /* Terra Battuta */
+    --surface: #fdf2f0;
+    --card: #ffffff;
+    --blue: #1a3a8a; /* Blu Tennis */
+    --blue-l: #2d54bc;
+    --blue-bg: #e8edf8;
+    --border: #dcb0a5;
+    --text: #1a3a8a;
+    --text-m: #8e5a4d;
+    --text-l: #b0a89e;
+    --r: 14px;
+    --sage: #8aab8e;
+    --blush: #c4847a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { 
+    background: var(--bg); 
+    font-family: 'Nunito', sans-serif; 
+    color: var(--text); 
+    padding: 20px 16px; 
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 15% 15%,rgba(255,255,255,.1) 0%,transparent 45%);
+  }
+  .container { max-width: 550px; margin: 0 auto; }
+
+  /* Overlay & Modali */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .hidden { display: none !important; }
+  .modal { background: var(--card); border-radius: 20px; padding: 32px 28px; width: 100%; max-width: 440px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
+  .modal h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--blue); margin-bottom: 20px; text-align: center; }
+
+  /* Header */
+  header { text-align: center; color: white; margin-bottom: 24px; }
+  .maestro-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid white; margin: 0 auto 15px; display: block; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
+  .meta-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 99px; font-size: 13px; font-weight: 600; margin-top: 10px; }
+
+  /* Admin Bar */
+  .admin-bar { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; }
+  .admin-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--blue); margin-bottom: 10px; }
+  .admin-share-box { background: var(--blue-bg); border: 1px solid var(--blue); border-radius: 99px; padding: 10px 12px; margin-bottom: 10px; }
+  .admin-share-row { display: flex; gap: 6px; align-items: stretch; }
+  .admin-url { flex: 1; background: transparent; border: none; padding: 7px 10px; font-size: 11px; color: var(--blue); word-break: break-all; font-weight: 600; overflow: hidden; }
+  .copy-btn-mini { padding: 7px 13px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .admin-btns { display: flex; flex-wrap: wrap; gap: 7px; }
+  .ab { padding: 7px 13px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--blue); }
+  
+  .export-box { display: none; margin-top: 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px; font-size: 13px; color: var(--text-m); }
+  .export-box.show { display: block; }
+  .whatsapp-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; }
+
+  /* Status & Progress */
+  .status-card { background: var(--card); border-radius: var(--r); padding: 16px 20px; margin-bottom: 14px; border: 1px solid var(--border); }
+  .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .prog-track { height: 8px; background: #eee; border-radius: 99px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--blue); width: 0%; transition: 0.5s; }
+  .status-badge { padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; text-transform: uppercase; color: #fff; display: inline-block; margin-top: 10px; }
+  .badge-open { background-color: var(--sage); }
+  .badge-closed { background-color: var(--blush); }
+
+  /* List & Items */
+  .list-card { background: var(--card); border-radius: var(--r); padding: 20px; border: 1px solid var(--border); margin-bottom: 14px; }
+  .reg-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; background: var(--surface); margin-bottom: 6px; }
+  .reg-num { font-weight: 700; color: var(--blue); width: 22px; font-size: 14px; }
+  .reg-name { flex: 1; font-weight: 600; font-size: 15px; color: #333; }
+  .del-btn-x { background: none; border: none; color: #ccc; font-size: 18px; cursor: pointer; }
+  .del-btn-x:hover { color: var(--blush); }
+
+  /* Form */
+  .field { margin-bottom: 15px; }
+  .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--blue); margin-bottom: 5px; }
+  .field input { width: 100%; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 12px 15px; font-family: inherit; font-size: 16px; color: var(--blue); }
+  .submit-btn { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+  .submit-btn:disabled { opacity: 0.4; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: #fff; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 600; transition: 0.3s; z-index: 300; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.ok { background: var(--sage); }
+</style>
+</head>
+<body>
+
+<div id="setupOverlay" class="overlay hidden">
+  <div class="modal">
+    <h2>Configura Clinic</h2>
+    <div class="field"><label>Titolo Evento</label><input type="text" id="sTitle" value="DIBBA TENNIS CLINIC"></div>
+    <div class="field"><label>Data</label><input type="date" id="sDate"></div>
+    <div class="field"><label>Orario</label><input type="time" id="sTime" value="10:00"></div>
+    <div class="field"><label>Luogo</label><input type="text" id="sPlace" value="Tennis Club"></div>
+    <div class="field"><label>Posti Disponibili</label><input type="number" id="sMax" value="12"></div>
+    <button class="submit-btn" onclick="launch()">Crea Evento →</button>
+    <button class="ab" style="width:100%; margin-top:10px; border:none" onclick="hide('setupOverlay')">Annulla</button>
+  </div>
+</div>
+
+<div class="container">
+  <header>
+    <img src="maestro.jpeg" alt="Maestro" class="maestro-img" onerror="this.src='https://via.placeholder.com/110?text=Tennis'">
+    <h1 id="hTitle">Tennis Clinic</h1>
+    <div id="metaInfo" class="meta-pill">Caricamento...</div>
+  </header>
+
+  <div id="adminBar" class="admin-bar hidden">
+    <div class="admin-title">⚙️ Pannello Organizzatore</div>
+    <div class="admin-share-box">
+      <div class="admin-share-row">
+        <div class="admin-url" id="adminUrlTxt">—</div>
+        <button class="copy-btn-mini" onclick="copyAdminLink()">📋 Copia</button>
+      </div>
+    </div>
+    <div class="admin-btns">
+      <button class="ab" onclick="toggleExport()">📋 Esporta Lista</button>
+      <button class="ab" onclick="show('setupOverlay')">🔄 Nuova Clinic</button>
+      <button class="ab" style="color:var(--blush)" onclick="doReset()">↺ Reset Iscritti</button>
+    </div>
+    <div id="exportBox" class="export-box">
+        <pre id="exportContent" style="white-space: pre-wrap; font-family: inherit; margin-bottom: 10px;"></pre>
+        <button class="whatsapp-btn" onclick="copyExportToWhatsApp()">📋 Copia lista per WhatsApp</button>
+    </div>
+  </div>
+
+  <div class="status-card">
+    <div class="status-row">
+      <span style="font-size: 11px; font-weight: 700; text-transform: uppercase;">Avanzamento Iscrizioni</span>
+      <span id="counter" style="font-weight: 800; color: var(--blue);">0 / 0</span>
+    </div>
+    <div class="prog-track"><div id="progFill" class="prog-fill"></div></div>
+    <div id="statusBadge"></div>
+  </div>
+
+  <div id="formCard" class="card" style="background:white; padding:20px; border-radius:var(--r); margin-bottom:14px; border:1px solid var(--border);">
+    <div class="field">
+      <label>Nome e Cognome</label>
+      <input type="text" id="playerName" placeholder="es. Roger Federer" oninput="checkForm()">
+    </div>
+    <button id="subBtn" class="submit-btn" onclick="register()" disabled>Conferma Iscrizione</button>
+  </div>
+
+  <div class="list-card">
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; margin-bottom:15px; color:var(--blue)">Giocatori Iscritti</h3>
+    <div id="playerList"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCH-0NeAPVShAcqBWLohT0q9JJOBYitW5k",
+  authDomain: "duplicato-anacrob.firebaseapp.com",
+  databaseURL: "https://duplicato-anacrob-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "duplicato-anacrob",
+  storageBucket: "duplicato-anacrob.firebasestorage.app",
+  messagingSenderId: "679147717441",
+  appId: "1:679147717441:web:1d0a8a938a14d0f50c57c0"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const PW_ADMIN = 'DIBBA170773';
+const p = new URLSearchParams(location.search);
+const isAdmin = p.get('admin') === PW_ADMIN;
+let BIN_ID = p.get('bin') || localStorage.getItem('tennis_bin_v3');
+let registrations = [];
+let MAX_P = 12;
+
+if (isAdmin) {
+  document.getElementById('adminBar').classList.remove('hidden');
+  if (!BIN_ID) show('setupOverlay');
+}
+
+if (BIN_ID) startSync();
+
+function startSync() {
+  db.ref('tennis_clinic/' + BIN_ID).on('value', (snap) => {
+    const data = snap.val();
+    if (!data) return;
+    registrations = data.regs || [];
+    MAX_P = data.meta.max || 12;
+    render(data.meta);
+  });
+}
+
+function render(meta) {
+  document.getElementById('hTitle').textContent = meta.title;
+  const d = new Date(meta.date);
+  const dataF = d.toLocaleDateString('it-IT', { day:'numeric', month:'long' });
+  document.getElementById('metaInfo').innerHTML = `🎾 ${dataF} • ${meta.time} @ ${meta.place}`;
+  
+  const count = registrations.length;
+  document.getElementById('counter').textContent = `${count} / ${MAX_P}`;
+  document.getElementById('progFill').style.width = (count / MAX_P * 100) + '%';
+  
+  const badge = document.getElementById('statusBadge');
+  const full = count >= MAX_P;
+  badge.innerHTML = full ? '<span class="status-badge badge-closed">Posti Esauriti</span>' : '<span class="status-badge badge-open">Iscrizioni Aperte</span>';
+  
+  document.getElementById('formCard').classList.toggle('hidden', full);
+  document.getElementById('adminUrlTxt').textContent = location.origin + location.pathname + '?bin=' + BIN_ID;
+
+  const list = document.getElementById('playerList');
+  list.innerHTML = count ? '' : '<p style="color:#aaa; font-style:italic; font-size:14px">Nessun iscritto al momento...</p>';
+  
+  registrations.forEach((r, i) => {
+    const div = document.createElement('div');
+    div.className = 'reg-item';
+    div.innerHTML = `<span class="reg-num">${i+1}</span><span class="reg-name">${r.name}</span>
+                     ${isAdmin ? `<button class="del-btn-x" onclick="deleteReg(${i})">×</button>` : ''}`;
+    list.appendChild(div);
+  });
+}
+
+async function launch() {
+  const newBin = 'TC' + Date.now();
+  const data = {
+    meta: {
+      title: document.getElementById('sTitle').value,
+      date: document.getElementById('sDate').value,
+      time: document.getElementById('sTime').value,
+      place: document.getElementById('sPlace').value,
+      max: parseInt(document.getElementById('sMax').value)
+    },
+    regs: []
+  };
+  await db.ref('tennis_clinic/' + newBin).set(data);
+  localStorage.setItem('tennis_bin_v3', newBin);
+  location.href = `?admin=${PW_ADMIN}&bin=${newBin}`;
+}
+
+async function register() {
+  const input = document.getElementById('playerName');
+  const name = formatName(input.value.trim());
+  if (registrations.length >= MAX_P) return;
+  
+  registrations.push({ name: name, ts: Date.now() });
+  await db.ref('tennis_clinic/' + BIN_ID + '/regs').set(registrations);
+  input.value = '';
+  toast('Registrato con successo!', 'ok');
+}
+
+async function deleteReg(idx) {
+  if(!confirm("Cancellare questo iscritto?")) return;
+  registrations.splice(idx, 1);
+  await db.ref('tennis_clinic/' + BIN_ID + '/regs').set(registrations);
+}
+
+async function doReset() {
+  if(!confirm("Azzerare tutta la lista?")) return;
+  await db.ref('tennis_clinic/' + BIN_ID + '/regs').set([]);
+}
+
+function checkForm() {
+  document.getElementById('subBtn').disabled = document.getElementById('playerName').value.trim().length < 3;
+}
+
+function toggleExport() {
+  const box = document.getElementById('exportBox');
+  box.classList.toggle('show');
+  if(box.classList.contains('show')) {
+    let t = `🎾 *${document.getElementById('hTitle').textContent.toUpperCase()}*\n`;
+    t += `📅 ${document.getElementById('metaInfo').textContent}\n`;
+    t += `───────────────\n`;
+    registrations.forEach((r, i) => t += `${i+1}. ${r.name}\n`);
+    t += `───────────────\n`;
+    t += `Totale: ${registrations.length} partecipanti.`;
+    document.getElementById('exportContent').textContent = t;
+  }
+}
+
+function copyExportToWhatsApp() {
+  const text = document.getElementById('exportContent').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    toast('Lista copiata per WhatsApp!', 'ok');
+  });
+}
+
+function copyAdminLink() {
+  navigator.clipboard.writeText(document.getElementById('adminUrlTxt').textContent);
+  toast('Link partecipanti copiato!', 'ok');
+}
+
+function formatName(s) { return s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '); }
+function toast(m, ty) {
+  const t = document.getElementById('toast');
+  t.textContent = m; t.className = `toast show ${ty}`;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+</script>
+</body>
+</html>
