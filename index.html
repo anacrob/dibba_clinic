@@ -373,6 +373,20 @@ body {
       </div>
     </div>
 
+    <!-- Form iscrizione manuale admin -->
+    <div style="margin-bottom:16px">
+      <div class="card-title">➕ Aggiungi Iscritto</div>
+      <div style="display:flex; gap:8px; align-items:stretch">
+        <input type="text" id="mgPlayerInput"
+               placeholder="Nome e Cognome"
+               style="flex:1; background:var(--clay-l); border:2px solid var(--border); border-radius:10px; padding:10px 13px; font-family:inherit; font-size:14px; color:var(--navy);"
+               oninput="checkMgForm()"
+               onkeydown="if(event.key==='Enter')adminAddReg()">
+        <button id="mgAddBtn" class="btn btn-primary" onclick="adminAddReg()" disabled
+                style="white-space:nowrap">Iscrivi</button>
+      </div>
+    </div>
+
     <!-- Lista iscritti in gestione -->
     <div style="margin-bottom:16px">
       <div class="card-title">Iscritti (<span id="mgCount">0</span>)</div>
@@ -622,6 +636,10 @@ function renderManageModal() {
     btn.className   = 'btn btn-success';
   }
 
+  // reset form aggiunta manuale
+  document.getElementById('mgPlayerInput').value = '';
+  document.getElementById('mgAddBtn').disabled = true;
+
   // reset wa box
   waBoxOpen = false;
   document.getElementById('waBox').classList.add('hidden');
@@ -631,6 +649,25 @@ function renderManageModal() {
 function copyShareLink() {
   const url = document.getElementById('mgShareUrl').textContent;
   navigator.clipboard.writeText(url).then(() => toast('Link copiato!', 'ok'));
+}
+
+function checkMgForm() {
+  const v = document.getElementById('mgPlayerInput').value.trim();
+  document.getElementById('mgAddBtn').disabled = v.length < 3;
+}
+
+async function adminAddReg() {
+  const input = document.getElementById('mgPlayerInput');
+  const name  = formatName(input.value.trim());
+  if (!name || name.length < 3) return;
+  if (managingRegs.length >= (managingMeta.max || 12)) {
+    toast('Posti esauriti!', 'err'); return;
+  }
+  managingRegs.push({ name, ts: Date.now() });
+  await db.ref(`${DB_ROOT}/${managingId}/regs`).set(managingRegs);
+  input.value = '';
+  document.getElementById('mgAddBtn').disabled = true;
+  toast(`${name} iscritto!`, 'ok');
 }
 
 async function adminDeleteReg(idx) {
