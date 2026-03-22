@@ -3,152 +3,396 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DIBBA TENNIS CLINIC - Iscrizioni</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>DIBBA TENNIS CLINIC</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #c25e44; /* Terra Battuta */
-    --surface: #fdf2f0;
-    --card: #ffffff;
-    --blue: #1a3a8a; /* Blu Tennis */
-    --blue-l: #2d54bc;
-    --blue-bg: #e8edf8;
-    --border: #dcb0a5;
-    --text: #1a3a8a;
-    --text-m: #8e5a4d;
-    --text-l: #b0a89e;
-    --r: 14px;
-    --sage: #8aab8e;
-    --blush: #c4847a;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { 
-    background: var(--bg); 
-    font-family: 'Nunito', sans-serif; 
-    color: var(--text); 
-    padding: 20px 16px; 
-    min-height: 100vh;
-    background-image: radial-gradient(circle at 15% 15%,rgba(255,255,255,.1) 0%,transparent 45%);
-  }
-  .container { max-width: 550px; margin: 0 auto; }
+:root {
+  --clay:    #c25e44;
+  --clay-d:  #a34a33;
+  --clay-l:  #fdf2f0;
+  --card:    #ffffff;
+  --navy:    #1a3a8a;
+  --navy-l:  #2d54bc;
+  --navy-bg: #e8edf8;
+  --border:  #dcb0a5;
+  --text:    #1a3a8a;
+  --text-m:  #8e5a4d;
+  --text-l:  #b0a89e;
+  --r:       14px;
+  --sage:    #6a9b6e;
+  --sage-l:  #e8f2e9;
+  --blush:   #c4847a;
+  --blush-l: #fdecea;
+  --gold:    #c8a84b;
+  --shadow:  0 2px 16px rgba(26,58,138,.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Overlay & Modali */
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; }
-  .hidden { display: none !important; }
-  .modal { background: var(--card); border-radius: 20px; padding: 32px 28px; width: 100%; max-width: 440px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
-  .modal h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--blue); margin-bottom: 20px; text-align: center; }
+body {
+  font-family: 'Nunito', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  background: var(--clay);
+  background-image:
+    radial-gradient(ellipse at 10% 10%, rgba(255,255,255,.13) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 90%, rgba(0,0,0,.08) 0%, transparent 50%);
+}
 
-  /* Header */
-  header { text-align: center; color: white; margin-bottom: 24px; }
-  .maestro-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid white; margin: 0 auto 15px; display: block; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-  h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
-  .meta-pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); padding: 6px 15px; border-radius: 99px; font-size: 13px; font-weight: 600; margin-top: 10px; }
+/* ── Utils ── */
+.hidden { display: none !important; }
+.container { max-width: 600px; margin: 0 auto; padding: 22px 16px; }
 
-  /* Admin Bar */
-  .admin-bar { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px 18px; margin-bottom: 14px; }
-  .admin-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--blue); margin-bottom: 10px; }
-  .admin-share-box { background: var(--blue-bg); border: 1px solid var(--blue); border-radius: 99px; padding: 10px 12px; margin-bottom: 10px; }
-  .admin-share-row { display: flex; gap: 6px; align-items: stretch; }
-  .admin-url { flex: 1; background: transparent; border: none; padding: 7px 10px; font-size: 11px; color: var(--blue); word-break: break-all; font-weight: 600; overflow: hidden; }
-  .copy-btn-mini { padding: 7px 13px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-  .admin-btns { display: flex; flex-wrap: wrap; gap: 7px; }
-  .ab { padding: 7px 13px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1.5px solid var(--border); background: var(--surface); color: var(--blue); }
-  
-  .export-box { display: none; margin-top: 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px; font-size: 13px; color: var(--text-m); }
-  .export-box.show { display: block; }
-  .whatsapp-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--blue); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12px; }
+/* ── Overlay / Modal ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.80);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal {
+  background: var(--card);
+  border-radius: 22px;
+  padding: 34px 28px;
+  width: 100%; max-width: 450px;
+  box-shadow: 0 12px 50px rgba(0,0,0,.35);
+  animation: slideUp .25s ease;
+}
+.modal h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; color: var(--navy);
+  margin-bottom: 22px; text-align: center;
+}
+@keyframes slideUp { from { transform: translateY(30px); opacity:0; } to { transform: translateY(0); opacity:1; } }
 
-  /* Status & Progress */
-  .status-card { background: var(--card); border-radius: var(--r); padding: 16px 20px; margin-bottom: 14px; border: 1px solid var(--border); }
-  .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .prog-track { height: 8px; background: #eee; border-radius: 99px; overflow: hidden; }
-  .prog-fill { height: 100%; background: var(--blue); width: 0%; transition: 0.5s; }
-  .status-badge { padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; text-transform: uppercase; color: #fff; display: inline-block; margin-top: 10px; }
-  .badge-open { background-color: var(--sage); }
-  .badge-closed { background-color: var(--blush); }
+/* ── Header ── */
+.site-header {
+  text-align: center; color: white;
+  margin-bottom: 26px;
+}
+.maestro-img {
+  width: 108px; height: 108px;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,.9);
+  margin: 0 auto 14px; display: block;
+  object-fit: cover;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.site-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 4px;
+}
+.meta-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.22);
+  padding: 7px 18px; border-radius: 99px;
+  font-size: 13px; font-weight: 600; margin-top: 10px;
+}
 
-  /* List & Items */
-  .list-card { background: var(--card); border-radius: var(--r); padding: 20px; border: 1px solid var(--border); margin-bottom: 14px; }
-  .reg-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; background: var(--surface); margin-bottom: 6px; }
-  .reg-num { font-weight: 700; color: var(--blue); width: 22px; font-size: 14px; }
-  .reg-name { flex: 1; font-weight: 600; font-size: 15px; color: #333; }
-  .del-btn-x { background: none; border: none; color: #ccc; font-size: 18px; cursor: pointer; }
-  .del-btn-x:hover { color: var(--blush); }
+/* ── Card base ── */
+.card {
+  background: var(--card);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  padding: 20px;
+}
+.card-title {
+  font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--navy); margin-bottom: 14px;
+}
 
-  /* Form */
-  .field { margin-bottom: 15px; }
-  .field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--blue); margin-bottom: 5px; }
-  .field input { width: 100%; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 12px 15px; font-family: inherit; font-size: 16px; color: var(--blue); }
-  .submit-btn { width: 100%; padding: 15px; background: var(--blue); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
-  .submit-btn:disabled { opacity: 0.4; }
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 9px;
+  font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--clay-l); color: var(--navy);
+  transition: .18s;
+}
+.btn:hover { filter: brightness(.95); }
+.btn-primary {
+  background: var(--navy); color: white;
+  border-color: var(--navy);
+}
+.btn-danger  { color: var(--blush); border-color: var(--blush); background: var(--blush-l); }
+.btn-success { color: var(--sage);  border-color: var(--sage);  background: var(--sage-l);  }
+.btn-full    { width: 100%; justify-content: center; padding: 14px; font-size: 15px; }
 
-  /* Toast */
-  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: #fff; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 600; transition: 0.3s; z-index: 300; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.ok { background: var(--sage); }
+/* ── Form fields ── */
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 11px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--navy); margin-bottom: 5px;
+}
+.field input, .field select {
+  width: 100%;
+  background: var(--clay-l);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 14px;
+  font-family: inherit; font-size: 15px; color: var(--navy);
+  transition: border-color .15s;
+}
+.field input:focus, .field select:focus {
+  outline: none; border-color: var(--navy);
+}
+
+/* ── Admin login ── */
+#loginView { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.login-box {
+  background: white; border-radius: 22px;
+  padding: 40px 32px; width: 100%; max-width: 380px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.25);
+  text-align: center;
+}
+.login-box h2 { font-family: 'Cormorant Garamond',serif; font-size: 26px; color: var(--navy); margin-bottom: 6px; }
+.login-box p  { font-size: 13px; color: var(--text-m); margin-bottom: 24px; }
+
+/* ── Dashboard ── */
+#dashView { }
+.dash-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px;
+}
+.dash-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; color: white;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+.tab {
+  flex: 1; padding: 10px; text-align: center;
+  border-radius: 10px; font-size: 13px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.7); background: rgba(255,255,255,.1);
+  transition: .18s;
+}
+.tab.active { background: white; color: var(--navy); border-color: white; }
+
+/* Clinic card in dashboard */
+.clinic-item {
+  background: white; border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 16px 18px; margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.clinic-item-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.clinic-item-info { flex: 1; }
+.clinic-item-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 600; color: var(--navy);
+  line-height: 1.2;
+}
+.clinic-item-meta { font-size: 12px; color: var(--text-m); margin-top: 3px; }
+.clinic-item-badge {
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge-open   { background: var(--sage-l);  color: var(--sage); }
+.badge-closed { background: var(--blush-l); color: var(--blush); }
+.clinic-item-prog { margin-bottom: 10px; }
+.prog-row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+.prog-track { height: 6px; background: #eee; border-radius: 99px; overflow: hidden; }
+.prog-fill   { height: 100%; background: var(--navy); transition: .5s; }
+.clinic-item-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── Public page ── */
+#publicView .status-card .prog-track { height: 8px; }
+.closed-banner {
+  background: var(--blush-l); border: 1.5px solid var(--blush);
+  border-radius: var(--r); padding: 16px 20px;
+  margin-bottom: 14px; text-align: center;
+}
+.closed-banner strong { display: block; color: var(--blush); font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+.closed-banner span   { font-size: 13px; color: var(--text-m); }
+
+/* Player list */
+.reg-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; border-radius: 9px;
+  background: var(--clay-l); margin-bottom: 6px;
+}
+.reg-num  { font-weight: 700; color: var(--navy); width: 22px; font-size: 14px; }
+.reg-name { flex: 1; font-weight: 600; font-size: 15px; color: #333; }
+.del-btn  { background: none; border: none; color: #ccc; font-size: 20px; cursor: pointer; line-height: 1; }
+.del-btn:hover { color: var(--blush); }
+
+/* WhatsApp export */
+.wa-box { margin-top: 12px; background: var(--clay-l); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+.wa-box pre { white-space: pre-wrap; font-family: inherit; font-size: 13px; color: var(--text-m); margin-bottom: 10px; }
+
+/* Share box */
+.share-box {
+  display: flex; gap: 6px; align-items: center;
+  background: var(--navy-bg); border: 1.5px solid var(--navy);
+  border-radius: 10px; padding: 10px 12px; margin-bottom: 12px;
+}
+.share-url { flex: 1; font-size: 11px; font-weight: 600; color: var(--navy); word-break: break-all; border: none; background: transparent; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #222; color: #fff;
+  padding: 12px 26px; border-radius: 99px;
+  font-size: 14px; font-weight: 700;
+  transition: .3s; z-index: 999; white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.ok   { background: var(--sage); }
+.toast.err  { background: var(--blush); }
+
+/* Empty state */
+.empty { text-align: center; padding: 30px 0; color: var(--text-l); font-style: italic; font-size: 14px; }
+
+/* Responsive */
+@media (max-width: 400px) {
+  .clinic-item-actions .btn { font-size: 11px; padding: 7px 10px; }
+}
 </style>
 </head>
 <body>
 
-<div id="setupOverlay" class="overlay hidden">
+<!-- ═══════════════ LOGIN ADMIN ═══════════════ -->
+<div id="loginView" class="hidden">
+  <div class="login-box">
+    <div style="font-size:48px; margin-bottom:12px">🎾</div>
+    <h2>Pannello Organizzatore</h2>
+    <p>Inserisci la password per accedere</p>
+    <div class="field">
+      <input type="password" id="loginPw" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Accedi →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ DASHBOARD ADMIN ═══════════════ -->
+<div id="dashView" class="hidden">
+  <div class="container">
+
+    <div class="dash-header">
+      <div>
+        <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.6); margin-bottom:2px">Organizzatore</div>
+        <h2>🎾 Dibba Tennis Clinic</h2>
+      </div>
+      <button class="btn btn-primary" onclick="openNewClinicModal()">＋ Nuova</button>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" id="tabAttive"   onclick="switchTab('attive')">Attive</div>
+      <div class="tab"        id="tabArchivio" onclick="switchTab('archivio')">Archiviate</div>
+    </div>
+
+    <div id="listAttive"></div>
+    <div id="listArchivio" class="hidden"></div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ PUBLIC VIEW ═══════════════ -->
+<div id="publicView" class="hidden">
+  <div class="container">
+
+    <header class="site-header">
+      <img src="maestro.jpeg" alt="Maestro" class="maestro-img"
+           onerror="this.src='https://via.placeholder.com/110?text=🎾'">
+      <h1 id="pubTitle">Tennis Clinic</h1>
+      <div id="pubMeta" class="meta-pill">Caricamento…</div>
+    </header>
+
+    <!-- Banner clinic chiusa -->
+    <div id="closedBanner" class="closed-banner hidden">
+      <strong>🔒 Iscrizioni Chiuse</strong>
+      <span>Le iscrizioni per questa clinic sono state chiuse dall'organizzatore.</span>
+    </div>
+
+    <!-- Progress -->
+    <div class="card status-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+        <span style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em">Avanzamento Iscrizioni</span>
+        <span id="pubCounter" style="font-weight:800; color:var(--navy)">0/0</span>
+      </div>
+      <div class="prog-track"><div id="pubProgFill" class="prog-fill"></div></div>
+      <div id="pubStatusBadge" style="margin-top:10px"></div>
+    </div>
+
+    <!-- Form iscrizione -->
+    <div id="pubFormCard" class="card">
+      <div class="field">
+        <label>Nome e Cognome</label>
+        <input type="text" id="playerName" placeholder="es. Roger Federer" oninput="checkForm()">
+      </div>
+      <button id="subBtn" class="btn btn-primary btn-full" onclick="register()" disabled>Conferma Iscrizione</button>
+    </div>
+
+    <!-- Lista iscritti -->
+    <div class="card">
+      <div class="card-title">🎾 Giocatori Iscritti</div>
+      <div id="pubPlayerList"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL: NUOVA CLINIC ═══════════════ -->
+<div id="newClinicOverlay" class="overlay hidden">
   <div class="modal">
-    <h2>Configura Clinic</h2>
+    <h2>Nuova Clinic</h2>
     <div class="field"><label>Titolo Evento</label><input type="text" id="sTitle" value="DIBBA TENNIS CLINIC"></div>
     <div class="field"><label>Data</label><input type="date" id="sDate"></div>
     <div class="field"><label>Orario</label><input type="time" id="sTime" value="10:00"></div>
     <div class="field"><label>Luogo</label><input type="text" id="sPlace" value="Tennis Club"></div>
-    <div class="field"><label>Posti Disponibili</label><input type="number" id="sMax" value="12"></div>
-    <button class="submit-btn" onclick="launch()">Crea Evento →</button>
-    <button class="ab" style="width:100%; margin-top:10px; border:none" onclick="hide('setupOverlay')">Annulla</button>
+    <div class="field"><label>Posti Disponibili</label><input type="number" id="sMax" value="12" min="1"></div>
+    <button class="btn btn-primary btn-full" style="margin-bottom:8px" onclick="createClinic()">Crea Clinic →</button>
+    <button class="btn btn-full" onclick="hideOverlay('newClinicOverlay')">Annulla</button>
   </div>
 </div>
 
-<div class="container">
-  <header>
-    <img src="maestro.jpeg" alt="Maestro" class="maestro-img" onerror="this.src='https://via.placeholder.com/110?text=Tennis'">
-    <h1 id="hTitle">Tennis Clinic</h1>
-    <div id="metaInfo" class="meta-pill">Caricamento...</div>
-  </header>
+<!-- ═══════════════ MODAL: GESTISCI CLINIC ═══════════════ -->
+<div id="manageOverlay" class="overlay hidden">
+  <div class="modal" style="max-height:90vh; overflow-y:auto">
+    <h2 id="mgTitle">Gestisci Clinic</h2>
 
-  <div id="adminBar" class="admin-bar hidden">
-    <div class="admin-title">⚙️ Pannello Organizzatore</div>
-    <div class="admin-share-box">
-      <div class="admin-share-row">
-        <div class="admin-url" id="adminUrlTxt">—</div>
-        <button class="copy-btn-mini" onclick="copyAdminLink()">📋 Copia</button>
+    <!-- Link partecipanti -->
+    <div style="margin-bottom:16px">
+      <div class="card-title">Link Partecipanti</div>
+      <div class="share-box">
+        <div class="share-url" id="mgShareUrl">—</div>
+        <button class="btn btn-primary" onclick="copyShareLink()" style="white-space:nowrap; padding:8px 12px; font-size:11px">📋 Copia</button>
       </div>
     </div>
-    <div class="admin-btns">
-      <button class="ab" onclick="toggleExport()">📋 Esporta Lista</button>
-      <button class="ab" onclick="show('setupOverlay')">🔄 Nuova Clinic</button>
-      <button class="ab" style="color:var(--blush)" onclick="doReset()">↺ Reset Iscritti</button>
-    </div>
-    <div id="exportBox" class="export-box">
-        <pre id="exportContent" style="white-space: pre-wrap; font-family: inherit; margin-bottom: 10px;"></pre>
-        <button class="whatsapp-btn" onclick="copyExportToWhatsApp()">📋 Copia lista per WhatsApp</button>
-    </div>
-  </div>
 
-  <div class="status-card">
-    <div class="status-row">
-      <span style="font-size: 11px; font-weight: 700; text-transform: uppercase;">Avanzamento Iscrizioni</span>
-      <span id="counter" style="font-weight: 800; color: var(--blue);">0 / 0</span>
+    <!-- Lista iscritti in gestione -->
+    <div style="margin-bottom:16px">
+      <div class="card-title">Iscritti (<span id="mgCount">0</span>)</div>
+      <div id="mgPlayerList"></div>
     </div>
-    <div class="prog-track"><div id="progFill" class="prog-fill"></div></div>
-    <div id="statusBadge"></div>
-  </div>
 
-  <div id="formCard" class="card" style="background:white; padding:20px; border-radius:var(--r); margin-bottom:14px; border:1px solid var(--border);">
-    <div class="field">
-      <label>Nome e Cognome</label>
-      <input type="text" id="playerName" placeholder="es. Roger Federer" oninput="checkForm()">
+    <!-- WhatsApp export -->
+    <div style="margin-bottom:16px">
+      <button class="btn btn-full" onclick="toggleWaBox()" id="waBtnToggle">📋 Esporta lista WhatsApp</button>
+      <div id="waBox" class="wa-box hidden">
+        <pre id="waContent"></pre>
+        <button class="btn btn-primary btn-full" onclick="copyWa()">📋 Copia per WhatsApp</button>
+      </div>
     </div>
-    <button id="subBtn" class="submit-btn" onclick="register()" disabled>Conferma Iscrizione</button>
-  </div>
 
-  <div class="list-card">
-    <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; margin-bottom:15px; color:var(--blue)">Giocatori Iscritti</h3>
-    <div id="playerList"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button id="mgToggleBtn" class="btn btn-success" onclick="toggleClinicStatus()" style="flex:1">Chiudi Iscrizioni</button>
+      <button class="btn btn-danger" onclick="confirmDeleteClinic()" style="flex:1">🗑 Elimina</button>
+    </div>
+    <button class="btn btn-full" style="margin-top:8px" onclick="hideOverlay('manageOverlay')">← Chiudi</button>
   </div>
 </div>
 
@@ -156,8 +400,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-
 <script>
+// ═══════════════ FIREBASE CONFIG ═══════════════
 const firebaseConfig = {
   apiKey: "AIzaSyCH-0NeAPVShAcqBWLohT0q9JJOBYitW5k",
   authDomain: "duplicato-anacrob.firebaseapp.com",
@@ -170,136 +414,386 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const PW_ADMIN = 'DIBBA170773';
-const p = new URLSearchParams(location.search);
-const isAdmin = p.get('admin') === PW_ADMIN;
-let BIN_ID = p.get('bin') || localStorage.getItem('tennis_bin_v3');
-let registrations = [];
-let MAX_P = 12;
+// ═══════════════ COSTANTI ═══════════════
+const PW_ADMIN   = 'DIBBA170773';
+const DB_ROOT    = 'tennis_clinic';
 
-if (isAdmin) {
-  document.getElementById('adminBar').classList.remove('hidden');
-  if (!BIN_ID) show('setupOverlay');
+// ═══════════════ STATO ═══════════════
+let currentTab      = 'attive';   // 'attive' | 'archivio'
+let allClinics      = {};         // { binId: {meta, regs, status} }
+let managingId      = null;       // binId in gestione nel modal
+let managingRegs    = [];
+let managingMeta    = {};
+let managingStatus  = 'open';
+let waBoxOpen       = false;
+
+// ─── public page state ───
+let pubBinId   = null;
+let pubRegs    = [];
+let pubMax     = 12;
+let pubStatus  = 'open';
+
+// ═══════════════ ROUTING ═══════════════
+const params  = new URLSearchParams(location.search);
+const pAdmin  = params.get('admin');
+const pBin    = params.get('bin');
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (pAdmin) {
+    // admin link con password in URL
+    if (pAdmin === PW_ADMIN) {
+      showAdminDashboard();
+    } else {
+      showView('loginView');
+    }
+  } else if (pBin) {
+    // link partecipante
+    pubBinId = pBin;
+    showView('publicView');
+    startPublicSync();
+  } else {
+    // nessun param → mostra login admin
+    showView('loginView');
+  }
+});
+
+// ═══════════════ LOGIN ═══════════════
+function doLogin() {
+  const pw = document.getElementById('loginPw').value.trim();
+  if (pw === PW_ADMIN) {
+    showAdminDashboard();
+  } else {
+    toast('Password errata', 'err');
+    document.getElementById('loginPw').value = '';
+  }
 }
 
-if (BIN_ID) startSync();
+// ═══════════════ DASHBOARD ═══════════════
+function showAdminDashboard() {
+  showView('dashView');
+  loadAllClinics();
+}
 
-function startSync() {
-  db.ref('tennis_clinic/' + BIN_ID).on('value', (snap) => {
-    const data = snap.val();
-    if (!data) return;
-    registrations = data.regs || [];
-    MAX_P = data.meta.max || 12;
-    render(data.meta);
+function loadAllClinics() {
+  db.ref(DB_ROOT).on('value', snap => {
+    allClinics = snap.val() || {};
+    renderDashboard();
+    // aggiorna modal gestione se aperto
+    if (managingId && allClinics[managingId]) {
+      managingRegs   = allClinics[managingId].regs   || [];
+      managingMeta   = allClinics[managingId].meta   || {};
+      managingStatus = allClinics[managingId].status || 'open';
+      renderManageModal();
+    }
   });
 }
 
-function render(meta) {
-  document.getElementById('hTitle').textContent = meta.title;
-  const d = new Date(meta.date);
-  const dataF = d.toLocaleDateString('it-IT', { day:'numeric', month:'long' });
-  document.getElementById('metaInfo').innerHTML = `🎾 ${dataF} • ${meta.time} @ ${meta.place}`;
-  
-  const count = registrations.length;
-  document.getElementById('counter').textContent = `${count} / ${MAX_P}`;
-  document.getElementById('progFill').style.width = (count / MAX_P * 100) + '%';
-  
-  const badge = document.getElementById('statusBadge');
-  const full = count >= MAX_P;
-  badge.innerHTML = full ? '<span class="status-badge badge-closed">Posti Esauriti</span>' : '<span class="status-badge badge-open">Iscrizioni Aperte</span>';
-  
-  document.getElementById('formCard').classList.toggle('hidden', full);
-  document.getElementById('adminUrlTxt').textContent = location.origin + location.pathname + '?bin=' + BIN_ID;
+function renderDashboard() {
+  const attive   = [];
+  const archivio = [];
+  Object.entries(allClinics).forEach(([id, c]) => {
+    if (!c || !c.meta) return;
+    if (c.status === 'closed') archivio.push({ id, ...c });
+    else                       attive.push({ id, ...c });
+  });
+  // ordina per data desc
+  const byDate = (a,b) => (b.meta.date||'').localeCompare(a.meta.date||'');
+  attive.sort(byDate); archivio.sort(byDate);
 
-  const list = document.getElementById('playerList');
-  list.innerHTML = count ? '' : '<p style="color:#aaa; font-style:italic; font-size:14px">Nessun iscritto al momento...</p>';
-  
-  registrations.forEach((r, i) => {
+  renderList('listAttive',   attive,   false);
+  renderList('listArchivio', archivio, true);
+}
+
+function renderList(containerId, list, archived) {
+  const el = document.getElementById(containerId);
+  if (!list.length) {
+    el.innerHTML = `<div class="empty">${archived ? 'Nessuna clinic archiviata' : 'Nessuna clinic attiva'}</div>`;
+    return;
+  }
+  el.innerHTML = '';
+  list.forEach(c => {
+    const regs  = c.regs  || [];
+    const max   = c.meta.max || 12;
+    const pct   = Math.min(100, Math.round(regs.length / max * 100));
+    const dateF = formatDate(c.meta.date);
+    const isOpen = c.status !== 'closed';
+
     const div = document.createElement('div');
-    div.className = 'reg-item';
-    div.innerHTML = `<span class="reg-num">${i+1}</span><span class="reg-name">${r.name}</span>
-                     ${isAdmin ? `<button class="del-btn-x" onclick="deleteReg(${i})">×</button>` : ''}`;
-    list.appendChild(div);
+    div.className = 'clinic-item';
+    div.innerHTML = `
+      <div class="clinic-item-head">
+        <div class="clinic-item-info">
+          <div class="clinic-item-title">${escHtml(c.meta.title)}</div>
+          <div class="clinic-item-meta">📅 ${dateF} • ${c.meta.time} @ ${escHtml(c.meta.place)}</div>
+        </div>
+        <span class="clinic-item-badge ${isOpen ? 'badge-open' : 'badge-closed'}">${isOpen ? 'Aperta' : 'Chiusa'}</span>
+      </div>
+      <div class="clinic-item-prog">
+        <div class="prog-row"><span>Iscritti</span><span>${regs.length} / ${max}</span></div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="clinic-item-actions">
+        <button class="btn" onclick="openManageModal('${c.id}')">⚙️ Gestisci</button>
+        <button class="btn ${isOpen ? 'btn-danger' : 'btn-success'}" onclick="quickToggle('${c.id}', event)">
+          ${isOpen ? '🔒 Chiudi' : '🔓 Riapri'}
+        </button>
+      </div>`;
+    el.appendChild(div);
   });
 }
 
-async function launch() {
-  const newBin = 'TC' + Date.now();
-  const data = {
-    meta: {
-      title: document.getElementById('sTitle').value,
-      date: document.getElementById('sDate').value,
-      time: document.getElementById('sTime').value,
-      place: document.getElementById('sPlace').value,
-      max: parseInt(document.getElementById('sMax').value)
-    },
-    regs: []
-  };
-  await db.ref('tennis_clinic/' + newBin).set(data);
-  localStorage.setItem('tennis_bin_v3', newBin);
-  location.href = `?admin=${PW_ADMIN}&bin=${newBin}`;
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tabAttive').classList.toggle('active',   tab === 'attive');
+  document.getElementById('tabArchivio').classList.toggle('active', tab === 'archivio');
+  document.getElementById('listAttive').classList.toggle('hidden',   tab !== 'attive');
+  document.getElementById('listArchivio').classList.toggle('hidden', tab !== 'archivio');
+}
+
+// ═══════════════ CREA CLINIC ═══════════════
+function openNewClinicModal() {
+  // preset data a oggi
+  document.getElementById('sDate').value = new Date().toISOString().slice(0,10);
+  showOverlay('newClinicOverlay');
+}
+
+async function createClinic() {
+  const title = document.getElementById('sTitle').value.trim();
+  const date  = document.getElementById('sDate').value;
+  const time  = document.getElementById('sTime').value;
+  const place = document.getElementById('sPlace').value.trim();
+  const max   = parseInt(document.getElementById('sMax').value) || 12;
+  if (!title || !date) { toast('Compila titolo e data', 'err'); return; }
+
+  const newId = 'TC' + Date.now();
+  await db.ref(`${DB_ROOT}/${newId}`).set({
+    meta:   { title, date, time, place, max },
+    regs:   [],
+    status: 'open'
+  });
+  hideOverlay('newClinicOverlay');
+  toast('Clinic creata!', 'ok');
+  switchTab('attive');
+}
+
+// ═══════════════ GESTISCI CLINIC (MODAL) ═══════════════
+function openManageModal(id) {
+  managingId     = id;
+  const c        = allClinics[id];
+  managingRegs   = c.regs   || [];
+  managingMeta   = c.meta   || {};
+  managingStatus = c.status || 'open';
+  renderManageModal();
+  showOverlay('manageOverlay');
+}
+
+function renderManageModal() {
+  const isOpen = managingStatus !== 'closed';
+  document.getElementById('mgTitle').textContent = managingMeta.title || 'Gestisci Clinic';
+
+  // share URL (solo link pubblico senza admin)
+  const shareUrl = `${location.origin}${location.pathname}?bin=${managingId}`;
+  document.getElementById('mgShareUrl').textContent = shareUrl;
+
+  // lista iscritti
+  document.getElementById('mgCount').textContent = managingRegs.length;
+  const list = document.getElementById('mgPlayerList');
+  list.innerHTML = '';
+  if (!managingRegs.length) {
+    list.innerHTML = '<div class="empty">Nessun iscritto</div>';
+  } else {
+    managingRegs.forEach((r, i) => {
+      const d = document.createElement('div');
+      d.className = 'reg-item';
+      d.innerHTML = `<span class="reg-num">${i+1}</span>
+                     <span class="reg-name">${escHtml(r.name)}</span>
+                     <button class="del-btn" onclick="adminDeleteReg(${i})">×</button>`;
+      list.appendChild(d);
+    });
+  }
+
+  // bottone apri/chiudi
+  const btn = document.getElementById('mgToggleBtn');
+  if (isOpen) {
+    btn.textContent = '🔒 Chiudi Iscrizioni';
+    btn.className   = 'btn btn-danger';
+  } else {
+    btn.textContent = '🔓 Riapri Iscrizioni';
+    btn.className   = 'btn btn-success';
+  }
+
+  // reset wa box
+  waBoxOpen = false;
+  document.getElementById('waBox').classList.add('hidden');
+  document.getElementById('waBtnToggle').textContent = '📋 Esporta lista WhatsApp';
+}
+
+function copyShareLink() {
+  const url = document.getElementById('mgShareUrl').textContent;
+  navigator.clipboard.writeText(url).then(() => toast('Link copiato!', 'ok'));
+}
+
+async function adminDeleteReg(idx) {
+  if (!confirm('Rimuovere questo iscritto?')) return;
+  managingRegs.splice(idx, 1);
+  await db.ref(`${DB_ROOT}/${managingId}/regs`).set(managingRegs);
+  toast('Iscritto rimosso', 'ok');
+}
+
+async function toggleClinicStatus() {
+  const newStatus = managingStatus === 'closed' ? 'open' : 'closed';
+  await db.ref(`${DB_ROOT}/${managingId}/status`).set(newStatus);
+  toast(newStatus === 'closed' ? 'Clinic chiusa' : 'Clinic riaperta', 'ok');
+}
+
+async function quickToggle(id, ev) {
+  ev.stopPropagation();
+  const c = allClinics[id];
+  if (!c) return;
+  const newStatus = c.status === 'closed' ? 'open' : 'closed';
+  await db.ref(`${DB_ROOT}/${id}/status`).set(newStatus);
+  toast(newStatus === 'closed' ? 'Clinic chiusa' : 'Clinic riaperta', 'ok');
+}
+
+async function confirmDeleteClinic() {
+  if (!confirm(`Eliminare la clinic "${managingMeta.title}"?\nL'operazione è irreversibile.`)) return;
+  await db.ref(`${DB_ROOT}/${managingId}`).remove();
+  hideOverlay('manageOverlay');
+  toast('Clinic eliminata', 'ok');
+}
+
+// ═══════════════ WHATSAPP ═══════════════
+function toggleWaBox() {
+  waBoxOpen = !waBoxOpen;
+  const box = document.getElementById('waBox');
+  box.classList.toggle('hidden', !waBoxOpen);
+  document.getElementById('waBtnToggle').textContent = waBoxOpen ? '▲ Chiudi' : '📋 Esporta lista WhatsApp';
+  if (waBoxOpen) buildWaText();
+}
+
+function buildWaText() {
+  const dateF = formatDate(managingMeta.date);
+  let t = `🎾 *${(managingMeta.title||'').toUpperCase()}*\n`;
+  t += `📅 ${dateF} • ${managingMeta.time} @ ${managingMeta.place}\n`;
+  t += `───────────────\n`;
+  managingRegs.forEach((r, i) => t += `${i+1}. ${r.name}\n`);
+  t += `───────────────\n`;
+  t += `Totale: ${managingRegs.length} partecipanti.`;
+  document.getElementById('waContent').textContent = t;
+}
+
+function copyWa() {
+  const text = document.getElementById('waContent').textContent;
+  navigator.clipboard.writeText(text).then(() => toast('Lista copiata per WhatsApp!', 'ok'));
+}
+
+// ═══════════════ PUBLIC PAGE ═══════════════
+function startPublicSync() {
+  db.ref(`${DB_ROOT}/${pubBinId}`).on('value', snap => {
+    const data = snap.val();
+    if (!data) { renderPublicNotFound(); return; }
+    pubRegs   = data.regs   || [];
+    pubMax    = data.meta?.max || 12;
+    pubStatus = data.status || 'open';
+    renderPublic(data.meta);
+  });
+}
+
+function renderPublic(meta) {
+  document.getElementById('pubTitle').textContent = meta.title;
+  const dateF = formatDate(meta.date);
+  document.getElementById('pubMeta').innerHTML = `🎾 ${dateF} • ${meta.time} @ ${escHtml(meta.place)}`;
+
+  const count   = pubRegs.length;
+  const isClosed = pubStatus === 'closed';
+  const isFull   = count >= pubMax;
+
+  document.getElementById('pubCounter').textContent = `${count} / ${pubMax}`;
+  document.getElementById('pubProgFill').style.width = (count / pubMax * 100) + '%';
+
+  // badge
+  const badge = document.getElementById('pubStatusBadge');
+  if (isClosed) {
+    badge.innerHTML = '<span class="clinic-item-badge badge-closed" style="font-size:12px; margin-top:2px">Iscrizioni Chiuse</span>';
+  } else if (isFull) {
+    badge.innerHTML = '<span class="clinic-item-badge badge-closed" style="font-size:12px; margin-top:2px">Posti Esauriti</span>';
+  } else {
+    badge.innerHTML = '<span class="clinic-item-badge badge-open" style="font-size:12px; margin-top:2px">Iscrizioni Aperte</span>';
+  }
+
+  // form e banner
+  const formCard = document.getElementById('pubFormCard');
+  const closedBanner = document.getElementById('closedBanner');
+  if (isClosed) {
+    closedBanner.classList.remove('hidden');
+    formCard.classList.add('hidden');
+  } else {
+    closedBanner.classList.add('hidden');
+    formCard.classList.toggle('hidden', isFull);
+  }
+
+  // lista
+  const list = document.getElementById('pubPlayerList');
+  list.innerHTML = '';
+  if (!pubRegs.length) {
+    list.innerHTML = '<div class="empty">Nessun iscritto al momento…</div>';
+  } else {
+    pubRegs.forEach((r, i) => {
+      const d = document.createElement('div');
+      d.className = 'reg-item';
+      d.innerHTML = `<span class="reg-num">${i+1}</span><span class="reg-name">${escHtml(r.name)}</span>`;
+      list.appendChild(d);
+    });
+  }
+}
+
+function renderPublicNotFound() {
+  document.getElementById('pubTitle').textContent = 'Clinic non trovata';
+  document.getElementById('pubMeta').textContent  = '—';
+  document.getElementById('pubFormCard').classList.add('hidden');
 }
 
 async function register() {
   const input = document.getElementById('playerName');
-  const name = formatName(input.value.trim());
-  if (registrations.length >= MAX_P) return;
-  
-  registrations.push({ name: name, ts: Date.now() });
-  await db.ref('tennis_clinic/' + BIN_ID + '/regs').set(registrations);
+  const name  = formatName(input.value.trim());
+  if (!name || pubRegs.length >= pubMax || pubStatus === 'closed') return;
+  pubRegs.push({ name, ts: Date.now() });
+  await db.ref(`${DB_ROOT}/${pubBinId}/regs`).set(pubRegs);
   input.value = '';
-  toast('Registrato con successo!', 'ok');
-}
-
-async function deleteReg(idx) {
-  if(!confirm("Cancellare questo iscritto?")) return;
-  registrations.splice(idx, 1);
-  await db.ref('tennis_clinic/' + BIN_ID + '/regs').set(registrations);
-}
-
-async function doReset() {
-  if(!confirm("Azzerare tutta la lista?")) return;
-  await db.ref('tennis_clinic/' + BIN_ID + '/regs').set([]);
+  document.getElementById('subBtn').disabled = true;
+  toast('Iscrizione confermata!', 'ok');
 }
 
 function checkForm() {
-  document.getElementById('subBtn').disabled = document.getElementById('playerName').value.trim().length < 3;
+  document.getElementById('subBtn').disabled =
+    document.getElementById('playerName').value.trim().length < 3;
 }
 
-function toggleExport() {
-  const box = document.getElementById('exportBox');
-  box.classList.toggle('show');
-  if(box.classList.contains('show')) {
-    let t = `🎾 *${document.getElementById('hTitle').textContent.toUpperCase()}*\n`;
-    t += `📅 ${document.getElementById('metaInfo').textContent}\n`;
-    t += `───────────────\n`;
-    registrations.forEach((r, i) => t += `${i+1}. ${r.name}\n`);
-    t += `───────────────\n`;
-    t += `Totale: ${registrations.length} partecipanti.`;
-    document.getElementById('exportContent').textContent = t;
-  }
+// ═══════════════ HELPERS ═══════════════
+function showView(id) {
+  ['loginView','dashView','publicView'].forEach(v =>
+    document.getElementById(v).classList.toggle('hidden', v !== id));
 }
+function showOverlay(id)  { document.getElementById(id).classList.remove('hidden'); }
+function hideOverlay(id)  { document.getElementById(id).classList.add('hidden'); }
 
-function copyExportToWhatsApp() {
-  const text = document.getElementById('exportContent').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    toast('Lista copiata per WhatsApp!', 'ok');
-  });
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('it-IT', { weekday:'short', day:'numeric', month:'long' });
 }
-
-function copyAdminLink() {
-  navigator.clipboard.writeText(document.getElementById('adminUrlTxt').textContent);
-  toast('Link partecipanti copiato!', 'ok');
+function formatName(s) {
+  return s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
-
-function formatName(s) { return s.toLowerCase().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '); }
-function toast(m, ty) {
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function toast(msg, type) {
   const t = document.getElementById('toast');
-  t.textContent = m; t.className = `toast show ${ty}`;
-  setTimeout(() => t.className = 'toast', 3000);
+  t.textContent = msg;
+  t.className = `toast show${type ? ' '+type : ''}`;
+  setTimeout(() => t.className = 'toast', 3200);
 }
-function show(id) { document.getElementById(id).classList.remove('hidden'); }
-function hide(id) { document.getElementById(id).classList.add('hidden'); }
 </script>
 </body>
 </html>
