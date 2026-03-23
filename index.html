@@ -825,7 +825,7 @@ function renderPublicList(all) {
       <div class="prog-track" style="margin-bottom:8px"><div class="prog-fill" style="width:${pct}%"></div></div>
       <div class="pub-clinic-card-footer">
         <span class="pub-clinic-spots${isFull ? ' full' : ''}">
-          ${isFull ? 'Nessun posto disponibile' : `${liberi} posto${liberi===1?'':'i'} disponibile${liberi===1?'':'i'}`}
+          ${isFull ? 'Nessun posto disponibile' : `Posti disponibili: ${liberi}`}
         </span>
         <button class="pub-clinic-cta${isFull ? ' full' : ''}"
                 onclick="${isFull ? '' : `goToClinic('${id}')`}">
