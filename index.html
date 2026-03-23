@@ -207,6 +207,43 @@ body {
 .prog-fill   { height: 100%; background: var(--navy); transition: .5s; }
 .clinic-item-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 
+/* ── Public list view ── */
+#pubListView .site-header { margin-bottom: 20px; }
+.pub-clinic-card {
+  background: white; border-radius: var(--r);
+  border: 1px solid var(--border);
+  padding: 18px 20px; margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  animation: fadeIn .2s ease;
+}
+.pub-clinic-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,58,138,.15); }
+.pub-clinic-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.pub-clinic-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 21px; font-weight: 600; color: var(--navy); line-height: 1.2;
+}
+.pub-clinic-card-meta { font-size: 12px; color: var(--text-m); margin-top: 4px; }
+.pub-clinic-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.pub-clinic-spots { font-size: 12px; font-weight: 700; color: var(--navy); }
+.pub-clinic-spots.full { color: var(--blush); }
+.pub-clinic-cta {
+  padding: 8px 18px; background: var(--navy); color: white;
+  border-radius: 8px; font-size: 13px; font-weight: 700;
+  border: none; cursor: pointer; font-family: inherit;
+}
+.pub-clinic-cta.full { background: var(--blush-l); color: var(--blush); cursor: default; }
+.pub-back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: rgba(255,255,255,.8); font-size: 13px; font-weight: 700;
+  background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+  border-radius: 8px; padding: 7px 14px; cursor: pointer;
+  margin-bottom: 18px; font-family: inherit;
+  transition: .15s;
+}
+.pub-back-btn:hover { background: rgba(255,255,255,.25); }
+
 /* ── Public page ── */
 #publicView .status-card .prog-track { height: 8px; }
 .closed-banner {
@@ -297,6 +334,23 @@ body {
     <div id="listAttive"></div>
     <div id="listArchivio" class="hidden"></div>
 
+  </div>
+</div>
+
+<!-- ═══════════════ PUBLIC LIST VIEW ═══════════════ -->
+<div id="pubListView" class="hidden">
+  <div class="container">
+    <button class="pub-back-btn" onclick="showView('pubListView'); startPublicListSync()">← Tutte le clinic</button>
+    <header class="site-header">
+      <img src="maestro.jpeg" alt="Maestro" class="maestro-img"
+           onerror="this.src='https://via.placeholder.com/110?text=🎾'">
+      <h1>Dibba Tennis Clinic</h1>
+      <div class="meta-pill">🎾 Scegli la tua clinic</div>
+    </header>
+    <div id="pubClinicList"></div>
+    <div id="pubClinicEmpty" class="hidden" style="text-align:center; color:white; padding:30px 0; opacity:.7; font-style:italic">
+      Nessuna clinic disponibile al momento
+    </div>
   </div>
 </div>
 
@@ -454,20 +508,20 @@ const pBin    = params.get('bin');
 
 window.addEventListener('DOMContentLoaded', () => {
   if (pAdmin) {
-    // admin link con password in URL
     if (pAdmin === PW_ADMIN) {
       showAdminDashboard();
     } else {
       showView('loginView');
     }
   } else if (pBin) {
-    // link partecipante
+    // link diretto a una clinic specifica
     pubBinId = pBin;
     showView('publicView');
     startPublicSync();
   } else {
-    // nessun param → mostra login admin
-    showView('loginView');
+    // nessun parametro → pagina pubblica con lista clinic
+    showView('pubListView');
+    startPublicListSync();
   }
 });
 
@@ -724,6 +778,70 @@ function copyWa() {
   navigator.clipboard.writeText(text).then(() => toast('Lista copiata per WhatsApp!', 'ok'));
 }
 
+// ═══════════════ PUBLIC LIST ═══════════════
+function startPublicListSync() {
+  db.ref(DB_ROOT).on('value', snap => {
+    const all = snap.val() || {};
+    renderPublicList(all);
+  });
+}
+
+function renderPublicList(all) {
+  const list = document.getElementById('pubClinicList');
+  const empty = document.getElementById('pubClinicEmpty');
+  list.innerHTML = '';
+
+  // solo clinic aperte, ordinate per data
+  const aperte = Object.entries(all)
+    .filter(([, c]) => c && c.meta && c.status !== 'closed')
+    .sort(([, a], [, b]) => (a.meta.date||'').localeCompare(b.meta.date||''));
+
+  if (!aperte.length) {
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  aperte.forEach(([id, c]) => {
+    const regs  = c.regs  || [];
+    const max   = c.meta.max || 12;
+    const liberi = Math.max(0, max - regs.length);
+    const isFull = liberi === 0;
+    const pct    = Math.min(100, Math.round(regs.length / max * 100));
+    const dateF  = formatDate(c.meta.date);
+
+    const card = document.createElement('div');
+    card.className = 'pub-clinic-card';
+    card.innerHTML = `
+      <div class="pub-clinic-card-head">
+        <div>
+          <div class="pub-clinic-card-title">${escHtml(c.meta.title)}</div>
+          <div class="pub-clinic-card-meta">📅 ${dateF} &nbsp;•&nbsp; 🕐 ${c.meta.time} &nbsp;•&nbsp; 📍 ${escHtml(c.meta.place)}</div>
+        </div>
+        <span class="clinic-item-badge ${isFull ? 'badge-closed' : 'badge-open'}" style="flex-shrink:0">
+          ${isFull ? 'Completa' : 'Aperta'}
+        </span>
+      </div>
+      <div class="prog-track" style="margin-bottom:8px"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <div class="pub-clinic-card-footer">
+        <span class="pub-clinic-spots${isFull ? ' full' : ''}">
+          ${isFull ? 'Nessun posto disponibile' : `${liberi} posto${liberi===1?'':'i'} disponibile${liberi===1?'':'i'}`}
+        </span>
+        <button class="pub-clinic-cta${isFull ? ' full' : ''}"
+                onclick="${isFull ? '' : `goToClinic('${id}')`}">
+          ${isFull ? 'Completa' : 'Iscriviti →'}
+        </button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function goToClinic(id) {
+  pubBinId = id;
+  showView('publicView');
+  startPublicSync();
+}
+
 // ═══════════════ PUBLIC PAGE ═══════════════
 function startPublicSync() {
   db.ref(`${DB_ROOT}/${pubBinId}`).on('value', snap => {
@@ -808,7 +926,7 @@ function checkForm() {
 
 // ═══════════════ HELPERS ═══════════════
 function showView(id) {
-  ['loginView','dashView','publicView'].forEach(v =>
+  ['loginView','dashView','pubListView','publicView'].forEach(v =>
     document.getElementById(v).classList.toggle('hidden', v !== id));
 }
 function showOverlay(id)  { document.getElementById(id).classList.remove('hidden'); }
